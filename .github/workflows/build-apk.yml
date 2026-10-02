@@ -14,9 +14,8 @@ jobs:
       - name: Extract Part 3B project
         run: |
           unzip -q report_app_part3b_updated.zip
-          cd report_app
-          echo "Flutter project:"
-          ls -la
+          echo "Project contents:"
+          ls -la report_app
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
