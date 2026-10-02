@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Part 3B project
+        run: |
+          unzip -q report_app_part3b_updated.zip
+          echo "Project contents:"
+          ls -la report_app
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Generate Android project
+        working-directory: report_app
+        run: |
+          flutter create --platforms=android .
+
+      - name: Get Flutter packages
+        working-directory: report_app
+        run: |
+          flutter pub get
+
+      - name: Build release APK
+        working-directory: report_app
+        run: |
+          flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-app-part3b
+          path: report_app/build/app/outputs/flutter-apk/app-release.apk
